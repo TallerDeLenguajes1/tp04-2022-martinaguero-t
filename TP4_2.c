@@ -31,7 +31,8 @@ void cargarTareas(Tarea **listaTareas, short cantTareas);
 void mostrarTarea(Tarea tarea);
 void consultarTareasRealizadas(Tarea **listaTareas, Tarea **listaTareasRealizadas, short cantTareas);
 void mostrarEstadoTareas(Tarea **tareasPendientes, Tarea **tareasRealizadas, short cantTareas);
-Tarea* buscarTarea(Tarea **tareas, short cantTareas, char *palabraBuscada);
+Tarea* buscarTareaPorPalabra(Tarea **tareas, short cantTareas, char *palabraBuscada);
+Tarea* buscarTareaPorID(Tarea **tareas, short cantTareas, int IDbuscado);
 
 int main()
 {
@@ -56,9 +57,19 @@ int main()
     printf("Busco la tarea que contenga la palabra \'Java\' en su descripcion:\n");
     if(buscarTarea(listaTareas,cantTareas,"Java")){
         printf("Se encontró la tarea, es\n");
-        mostrarTarea(*buscarTarea(listaTareas,cantTareas,"Java"));
+        mostrarTarea(*buscarTareaPorPalabra(listaTareas,cantTareas,"Java"));
     } else {
         printf("No se encontro la tarea");
+    }
+
+    printf("=======================================\n");
+
+    printf("Se busca la tarea con ID 5:\n");
+    
+    if(buscarTarea(listaTareas,cantTareas,5)!=NULL){
+        mostrarTarea(*buscarTareaPorID(listaTareas,cantTareas,5));
+    } else {
+        printf("No se encontro la tarea.\n");
     }
 
     Tarea **listaTareasRealizadas;
@@ -178,11 +189,26 @@ void mostrarEstadoTareas(Tarea **tareasPendientes, Tarea **tareasRealizadas, sho
     }
 }
 
-Tarea* buscarTarea(Tarea **tareas, short cantTareas, char *palabraBuscada)
+Tarea* buscarTareaPorPalabra(Tarea **tareas, short cantTareas, char *palabraBuscada)
 {
     for (int i = 0; i < cantTareas; i++)
     {
         if (strstr(tareas[i]->descripcion,palabraBuscada) != NULL)
+        {
+            return tareas[i];
+        }
+
+    }
+
+    return NULL;
+    
+}
+
+Tarea* buscarTareaPorID(Tarea **tareas, short cantTareas, int IDbuscado)
+{
+    for (int i = 0; i < cantTareas; i++)
+    {
+        if (tareas[i]->TareaID == IDbuscado)
         {
             return tareas[i];
         }
