@@ -4,22 +4,6 @@
 
 #define BUFFSIZE 100
 
-struct Producto
-{
-    int productoID;
-    int cantidad;
-    char *tipoProducto;
-    float precioUnitario;
-} typedef Producto;
-
-struct Cliente
-{
-    int clienteID;
-    char *nombreCliente;
-    int cantidadProductosAPedir;
-    Producto *productos;
-} typedef Cliente;
-
 struct Tarea
 {
     int TareaID;
@@ -33,6 +17,7 @@ void consultarTareasRealizadas(Tarea **listaTareas, Tarea **listaTareasRealizada
 void mostrarEstadoTareas(Tarea **tareasPendientes, Tarea **tareasRealizadas, short cantTareas);
 Tarea* buscarTareaPorPalabra(Tarea **tareas, short cantTareas, char *palabraBuscada);
 Tarea* buscarTareaPorID(Tarea **tareas, short cantTareas, int IDbuscado);
+void LiberarMemoria(Tarea** listadoTareas, short cantTareas);
 
 int main()
 {
@@ -54,26 +39,40 @@ int main()
 
     cargarTareas(listaTareas, cantTareas);
 
+    printf("=======================================\n");
+
     printf("Busco la tarea que contenga la palabra \'Java\' en su descripcion:\n");
-    if(buscarTarea(listaTareas,cantTareas,"Java")){
-        printf("Se encontró la tarea, es\n");
+
+    if(buscarTareaPorPalabra(listaTareas,cantTareas,"Java")!= NULL){
+
+        printf("Se encontro la tarea, es\n");
         mostrarTarea(*buscarTareaPorPalabra(listaTareas,cantTareas,"Java"));
+
     } else {
-        printf("No se encontro la tarea");
+
+        printf("No se encontro la tarea.\n");
+
     }
 
     printf("=======================================\n");
 
     printf("Se busca la tarea con ID 5:\n");
     
-    if(buscarTarea(listaTareas,cantTareas,5)!=NULL){
+    if(buscarTareaPorID(listaTareas,cantTareas,5)!=NULL){
+
         mostrarTarea(*buscarTareaPorID(listaTareas,cantTareas,5));
+
     } else {
+
         printf("No se encontro la tarea.\n");
+
     }
+
+    printf("=======================================\n");
 
     Tarea **listaTareasRealizadas;
     listaTareasRealizadas = (Tarea **)malloc(sizeof(Tarea *) * cantTareas);
+    // Se genera el arreglo de punteros donde se guardarán las tareas realizadas.
 
     for (short i = 0; i < cantTareas; i++)
     {
@@ -81,13 +80,12 @@ int main()
     }
     // Precargo en NULL el arreglo de punteros para guardar las tareas realizadas
 
-    // Se genera el arreglo de punteros donde se guardarán las tareas realizadas.
-
     consultarTareasRealizadas(listaTareas, listaTareasRealizadas, cantTareas);
 
     mostrarEstadoTareas(listaTareas, listaTareasRealizadas, cantTareas);
 
-    // LIBERAR LA MEMORIA RESERVADA :)
+    LiberarMemoria(listaTareas,cantTareas);
+    LiberarMemoria(listaTareasRealizadas,cantTareas);
 
     return 0;
 }
@@ -201,7 +199,7 @@ Tarea* buscarTareaPorPalabra(Tarea **tareas, short cantTareas, char *palabraBusc
     }
 
     return NULL;
-    
+
 }
 
 Tarea* buscarTareaPorID(Tarea **tareas, short cantTareas, int IDbuscado)
@@ -219,5 +217,20 @@ Tarea* buscarTareaPorID(Tarea **tareas, short cantTareas, int IDbuscado)
     
 }
 
+void LiberarMemoria(Tarea** listadoTareas, short cantTareas){
 
+    for (short i = 0; i < cantTareas; i++)
+    {
+        if(listadoTareas[i] != NULL) free(listadoTareas[i]->descripcion);
+        // Se libera la memoria usada para guardar la descripcion de la tarea
+
+        free(listadoTareas[i]);
+        // Se libera la memoria reservada para cada struct Tarea
+
+    }
+
+    free(listadoTareas);
+    // Se libera la memoria para el puntero doble.
+    
+}
 
