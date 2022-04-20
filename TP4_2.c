@@ -61,11 +61,6 @@ int main()
         printf("No se encontro la tarea");
     }
 
-
-    printf("=======================================\n");
-
-    printf("Se busca la tarea con ID 5:\n");
-    
     Tarea **listaTareasRealizadas;
     listaTareasRealizadas = (Tarea **)malloc(sizeof(Tarea *) * cantTareas);
 
@@ -158,6 +153,28 @@ void consultarTareasRealizadas(Tarea **listaTareas, Tarea **listaTareasRealizada
 
             // Solo si se encontró una tarea realizada se carga el arreglo de tareas realizadas y se mueve el indice.
         }
+    }
+}
+
+void mostrarEstadoTareas(Tarea **tareasPendientes, Tarea **tareasRealizadas, short cantTareas)
+{
+
+    printf("Se muestran las tareas sin realizar:\n");
+    for (int i = 0; i < cantTareas; i++)
+    {
+        if (tareasPendientes[i] != NULL)
+        {
+            mostrarTarea(*tareasPendientes[i]);
+        }
+    }
+
+    printf("Se muestran las tareas realizadas:\n");
+    int j = 0;
+
+    while (tareasRealizadas[j] != NULL)
+    {
+        mostrarTarea(*tareasRealizadas[j]);
+        j++;
     }
 }
 
