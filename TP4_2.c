@@ -31,7 +31,7 @@ void cargarTareas(Tarea **listaTareas, short cantTareas);
 void mostrarTarea(Tarea tarea);
 void consultarTareasRealizadas(Tarea **listaTareas, Tarea **listaTareasRealizadas, short cantTareas);
 void mostrarEstadoTareas(Tarea **tareasPendientes, Tarea **tareasRealizadas, short cantTareas);
-Tarea* buscarTarea(Tarea **tareas, short cantTareas, int IDbuscado);
+Tarea* buscarTarea(Tarea **tareas, short cantTareas, char *palabraBuscada);
 
 int main()
 {
@@ -52,6 +52,15 @@ int main()
     // Generacion del arreglo con un puntero doble de manera dinámica
 
     cargarTareas(listaTareas, cantTareas);
+
+    printf("Busco la tarea que contenga la palabra \'Java\' en su descripcion:\n");
+    if(buscarTarea(listaTareas,cantTareas,"Java")){
+        printf("Se encontró la tarea, es\n");
+        mostrarTarea(*buscarTarea(listaTareas,cantTareas,"Java"));
+    } else {
+        printf("No se encontro la tarea");
+    }
+
 
     printf("=======================================\n");
 
@@ -152,6 +161,20 @@ void consultarTareasRealizadas(Tarea **listaTareas, Tarea **listaTareasRealizada
     }
 }
 
+Tarea* buscarTarea(Tarea **tareas, short cantTareas, char *palabraBuscada)
+{
+    for (int i = 0; i < cantTareas; i++)
+    {
+        if (strstr(tareas[i]->descripcion,palabraBuscada) != NULL)
+        {
+            return tareas[i];
+        }
+
+    }
+    
+    return NULL;
+    
+}
 
 
 
