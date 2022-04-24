@@ -23,6 +23,8 @@ Lista cargarTarea(Lista listaTareas, short ID);
 void mostrarTareas(Lista listaTareas);
 void mostrarTarea(Tarea tarea);
 void consultarEstadoTareas(Lista* listaTareasPendientes, Lista* listaTareasRealizadas);
+Nodo* buscarPorID(Lista listaTareas, int ID);
+Nodo* buscarPorPalabra(Lista listaTareas, char* palabra);
 
 int main(){
 
@@ -48,6 +50,29 @@ int main(){
 
     printf("A continuacion se presenta\ninformacion de las tareas cargadas:\n");
     mostrarTareas(tareasPendientes);
+
+    printf("=======================================\n");
+
+    printf("La tarea con el ID 2 es:\n");
+    if(buscarPorID(tareasPendientes,2)){
+        mostrarTarea(buscarPorID(tareasPendientes,2)->tarea);
+    } else {
+        printf("No se encontro la tarea\n");
+    }
+
+    printf("=======================================\n");
+
+    printf("La tarea con la palabra 'comprar' es:\n");
+
+    if(buscarPorPalabra(tareasPendientes,"comprar")){
+        mostrarTarea(buscarPorPalabra(tareasPendientes,"comprar")->tarea);
+    } else {
+        printf("No se encontro la tarea\n");
+    }
+
+    printf("=======================================\n");
+
+
     consultarEstadoTareas(&tareasPendientes,&tareasRealizadas);
 
     printf("A continuacion se presenta\ninformacion de las tareas pendientes:\n");
@@ -192,3 +217,27 @@ void consultarEstadoTareas(Lista* listaTareasPendientes, Lista* listaTareasReali
     *listaTareasPendientes = listaTareasPendientesAux;
 
 }
+
+Nodo* buscarPorID(Lista listaTareas, int ID){
+
+    while(listaTareas!=NULL){
+
+        if((listaTareas->tarea).TareaID == ID){
+            return listaTareas;
+        }
+
+        listaTareas = listaTareas->sigNodo;
+    }
+
+
+}
+
+Nodo* buscarPorPalabra(Lista listaTareas, char* palabra){
+    while(listaTareas!=NULL){
+
+        if(strstr((listaTareas->tarea).descripcion,palabra)){
+            return listaTareas;
+        }
+        listaTareas = listaTareas->sigNodo;
+    }
+}   
