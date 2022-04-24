@@ -21,6 +21,8 @@ typedef Nodo* Lista;
 void cargarTareas(Lista* listaTareas, short cantTareas);
 Lista cargarTarea(Lista listaTareas, short ID);
 void mostrarTareas(Lista listaTareas);
+void mostrarTarea(Tarea tarea);
+void consultarEstadoTareas(Lista* listaTareasPendientes, Lista* listaTareasRealizadas);
 
 int main(){
 
@@ -42,9 +44,15 @@ int main(){
     printf("=======================================\n");
 
 
-    cargarTareas(&tareasRealizadas,cantTareas);
+    cargarTareas(&tareasPendientes,cantTareas);
 
     printf("A continuacion se presenta\ninformacion de las tareas cargadas:\n");
+    mostrarTareas(tareasPendientes);
+    consultarEstadoTareas(&tareasPendientes,&tareasRealizadas);
+
+    printf("A continuacion se presenta\ninformacion de las tareas pendientes:\n");
+    mostrarTareas(tareasPendientes);
+    printf("A continuacion se presenta\ninformacion de las tareas realizadas:\n");
     mostrarTareas(tareasRealizadas);
 
     // Recordar liberar memoria al final!!
@@ -132,21 +140,55 @@ void mostrarTareas(Lista listaTareas){
 
     while(listaTareas != NULL){
 
-        printf("=======================================\n");
-        printf("Informacion de la tarea %d\n",listaTareas->tarea.TareaID);
-        printf("-> Descripcion:");
-        puts(listaTareas->tarea.descripcion);
-
-        printf("-> Duracion: %d\n",listaTareas->tarea.duracion);
-
+        mostrarTarea(listaTareas->tarea);
         listaTareas = listaTareas->sigNodo;
 
     }
 }
 
-void consultarEstadoTareas(Lista listaTareasRealizadas, Lista listaTareasPendientes, short cantTareas){
+void mostrarTarea(Tarea tarea){
 
-    while(listaTareasRealizadas != NULL){
-        // Completar!
+    printf("=======================================\n");
+    printf("Informacion de la tarea %d\n",tarea.TareaID);
+    printf("-> Descripcion:");
+    puts(tarea.descripcion);
+    printf("-> Duracion: %d\n",tarea.duracion);
+
+}
+
+void consultarEstadoTareas(Lista* listaTareasPendientes, Lista* listaTareasRealizadas){
+
+    short realizada;
+    Lista listaTareasPendientesAux = NULL;
+    Nodo* puntProxNodoAux = NULL;
+
+    printf("- Ahora analicemos cada tarea:\n");
+
+    while(*listaTareasPendientes != NULL){
+
+        puntProxNodoAux = (*listaTareasPendientes)->sigNodo;
+
+        mostrarTarea((*listaTareasPendientes)->tarea);
+
+        do
+        {
+            printf("Fue realizada? 1: si, 0; no\n");
+            scanf("%hd", &realizada);
+
+        } while (realizada != 0 && realizada != 1);
+    
+        if(realizada == 1){
+            (*listaTareasPendientes)->sigNodo = *listaTareasRealizadas;
+            *listaTareasRealizadas = *listaTareasPendientes;
+        } else {
+            (*listaTareasPendientes)->sigNodo = listaTareasPendientesAux;
+            listaTareasPendientesAux = *listaTareasPendientes;
+        }
+
+        *listaTareasPendientes = puntProxNodoAux;
+
     }
+
+    *listaTareasPendientes = listaTareasPendientesAux;
+
 }
