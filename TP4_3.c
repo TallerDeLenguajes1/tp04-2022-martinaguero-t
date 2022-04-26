@@ -25,6 +25,7 @@ void mostrarTarea(Tarea tarea);
 void consultarEstadoTareas(Lista* listaTareasPendientes, Lista* listaTareasRealizadas);
 Nodo* buscarPorID(Lista listaTareas, int ID);
 Nodo* buscarPorPalabra(Lista listaTareas, char* palabra);
+void liberarMemoria(Lista* tareas);
 
 int main(){
 
@@ -80,10 +81,21 @@ int main(){
     printf("A continuacion se presenta\ninformacion de las tareas realizadas:\n");
     mostrarTareas(tareasRealizadas);
 
-    // Recordar liberar memoria al final!!
-    
+    liberarMemoria(&tareasRealizadas);
+    liberarMemoria(&tareasPendientes);
+
     return 0;
 
+}
+
+void liberarMemoria(Lista* tareas){
+    Nodo* auxLiberarMemoria = NULL;
+    while(tareas){
+        free(((*tareas)->tarea).descripcion);
+        auxLiberarMemoria = *tareas;
+        *tareas = (*tareas)->sigNodo;
+        free(auxLiberarMemoria);
+    }
 }
 
 void cargarTareas(Lista* listaTareas, short cantTareas){
@@ -204,11 +216,16 @@ void consultarEstadoTareas(Lista* listaTareasPendientes, Lista* listaTareasReali
     
         if(realizada == 1){
             (*listaTareasPendientes)->sigNodo = *listaTareasRealizadas;
+            // El puntero del nodo a agregar a la lista de tareas realizadas apuntará al último nodo agregado a dicha lista.
             *listaTareasRealizadas = *listaTareasPendientes;
+            // La cabecera de la lista de tareas realizadas apunta al nodo recién agregado a la lista.
         } else {
             (*listaTareasPendientes)->sigNodo = listaTareasPendientesAux;
+            // El puntero del nodo a agregar a la lista de tareas pendientes (auxiliar) apuntará al último nodo agregado a dicha lista.
             listaTareasPendientesAux = *listaTareasPendientes;
+            // El puntero del nodo a agregar a la lista de tareas pendientes (auxiliar) apuntará al último nodo agregado a dicha lista.
         }
+        // Se usa una lista auxiliar para tareas pendientes a fin de evitar tener que revincular nodos de la lista de tareas pendientes y considerar distintos casos donde el nodo que puede ser pasado a la lista de tareas realizadas esté o al principio, o en el medio, o al final de la lista de tareas pendientes original.
 
         *listaTareasPendientes = puntProxNodoAux;
 
@@ -217,6 +234,8 @@ void consultarEstadoTareas(Lista* listaTareasPendientes, Lista* listaTareasReali
     *listaTareasPendientes = listaTareasPendientesAux;
 
 }
+// CONSULTA: Funcionamiento de la función y listas resultantes con tareas en orden invertido
+
 
 Nodo* buscarPorID(Lista listaTareas, int ID){
 

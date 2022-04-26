@@ -161,6 +161,7 @@ void consultarTareasRealizadas(Tarea **listaTareas, Tarea **listaTareasRealizada
             indiceTRealizadas++;
 
             // Solo si se encontró una tarea realizada se carga el arreglo de tareas realizadas y se mueve el indice.
+
         }
     }
 }
@@ -221,10 +222,13 @@ void LiberarMemoria(Tarea** listadoTareas, short cantTareas){
 
     for (short i = 0; i < cantTareas; i++)
     {
-        if(listadoTareas[i] != NULL) free(listadoTareas[i]->descripcion);
+        if(listadoTareas[i] != NULL){ 
+            
+            free(listadoTareas[i]->descripcion);
+            free(listadoTareas[i]);
+        }
         // Se libera la memoria usada para guardar la descripcion de la tarea
 
-        free(listadoTareas[i]);
         // Se libera la memoria reservada para cada struct Tarea
 
     }
