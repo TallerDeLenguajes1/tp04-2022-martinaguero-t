@@ -181,7 +181,7 @@ void mostrarEstadoTareas(Tarea **tareasPendientes, Tarea **tareasRealizadas, sho
     printf("Se muestran las tareas realizadas:\n");
     int j = 0;
 
-    while (tareasRealizadas[j] != NULL)
+    while (j < cantTareas && tareasRealizadas[j] != NULL)
     {
         mostrarTarea(*tareasRealizadas[j]);
         j++;

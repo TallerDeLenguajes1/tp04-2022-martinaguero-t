@@ -25,7 +25,7 @@ void mostrarTarea(Tarea tarea);
 void consultarEstadoTareas(Lista* listaTareasPendientes, Lista* listaTareasRealizadas);
 Nodo* buscarPorID(Lista listaTareas, int ID);
 Nodo* buscarPorPalabra(Lista listaTareas, char* palabra);
-void liberarMemoria(Lista* tareas);
+Lista liberarMemoria(Lista tareas);
 
 int main(){
 
@@ -81,21 +81,22 @@ int main(){
     printf("A continuacion se presenta\ninformacion de las tareas realizadas:\n");
     mostrarTareas(tareasRealizadas);
 
-    liberarMemoria(&tareasRealizadas);
-    liberarMemoria(&tareasPendientes);
-
+    tareasRealizadas = liberarMemoria(tareasRealizadas);
+    tareasPendientes = liberarMemoria(tareasPendientes);
+    
     return 0;
 
 }
 
-void liberarMemoria(Lista* tareas){
+Lista liberarMemoria(Lista tareas){
     Nodo* auxLiberarMemoria = NULL;
     while(tareas){
-        free(((*tareas)->tarea).descripcion);
-        auxLiberarMemoria = *tareas;
-        *tareas = (*tareas)->sigNodo;
+        free((tareas->tarea).descripcion);
+        auxLiberarMemoria = tareas;
+        tareas = tareas->sigNodo;
         free(auxLiberarMemoria);
     }
+    return tareas;
 }
 
 void cargarTareas(Lista* listaTareas, short cantTareas){
@@ -234,7 +235,6 @@ void consultarEstadoTareas(Lista* listaTareasPendientes, Lista* listaTareasReali
     *listaTareasPendientes = listaTareasPendientesAux;
 
 }
-// CONSULTA: Funcionamiento de la función y listas resultantes con tareas en orden invertido
 
 
 Nodo* buscarPorID(Lista listaTareas, int ID){
